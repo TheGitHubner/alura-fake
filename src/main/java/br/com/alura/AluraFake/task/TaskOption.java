@@ -1,6 +1,7 @@
 package br.com.alura.AluraFake.task;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.util.Assert;
@@ -14,9 +15,11 @@ public class TaskOption {
     private Long id;
 
     @Column(length = 80, nullable = false)
+    @Getter
     private String optionDescription;
 
     @Column(nullable = false)
+    @Getter
     private boolean isCorrect;
 
     @ManyToOne(optional = false)
