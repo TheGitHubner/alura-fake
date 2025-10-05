@@ -24,6 +24,7 @@ public class TaskOption {
 
     @ManyToOne(optional = false)
     @Setter
+    @Getter
     private Task task;
 
     public TaskOption(String optionDescription, boolean isOptionCorrect) {

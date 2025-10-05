@@ -51,4 +51,11 @@ public class Task {
         this.statement = statement;
         this.taskOrder = order;
     }
+
+    public void addTaskOption(TaskOption option) {
+        Assert.isTrue(!Type.OPEN_TEXT.equals(this.taskType), "Atividades de resposta aberta não podem ter opções");
+        Assert.notNull(option, "A opção não pode ser nula");
+        option.setTask(this);
+        this.options.add(option);
+    }
 }
