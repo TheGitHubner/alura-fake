@@ -1,11 +1,18 @@
 package br.com.alura.AluraFake.user;
 
+import lombok.Getter;
+
 import java.io.Serializable;
 
 public class UserListItemDTO implements Serializable {
 
+    @Getter
     private String name;
+
+    @Getter
     private String email;
+
+    @Getter
     private Role role;
 
     public UserListItemDTO(User user) {
@@ -13,17 +20,4 @@ public class UserListItemDTO implements Serializable {
         this.email = user.getEmail();
         this.role = user.getRole();
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
 }
