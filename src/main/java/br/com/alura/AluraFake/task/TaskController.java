@@ -20,20 +20,20 @@ public class TaskController {
 
     @PostMapping("/new/opentext")
     public ResponseEntity newOpenTextExercise(@Valid @RequestBody NewOpenTextTaskDTO newOpenTextTaskDTO) {
-        Task createdTask = taskService.createOpenTextTask(newOpenTextTaskDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdTask);
+        taskService.createOpenTextTask(newOpenTextTaskDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/new/singlechoice")
     public ResponseEntity newSingleChoice(@Valid @RequestBody NewSingleChoiceTaskDTO newSingleChoiceTaskDTO) {
-        Task createdTask = taskService.createSingleChoiceTask(newSingleChoiceTaskDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdTask);
+        taskService.createSingleChoiceTask(newSingleChoiceTaskDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/new/multiplechoice")
     public ResponseEntity newMultipleChoice(@Valid @RequestBody NewMultipleChoiceTaskDTO newMultipleChoiceTaskDTO) {
-        Task createdTask = taskService.createMultipleChoiceTask(newMultipleChoiceTaskDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdTask);
+        taskService.createMultipleChoiceTask(newMultipleChoiceTaskDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 }

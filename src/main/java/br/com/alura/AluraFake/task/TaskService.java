@@ -26,7 +26,7 @@ public class TaskService {
     }
 
     @Transactional
-    public Task createOpenTextTask(NewOpenTextTaskDTO newOpenTextTaskDTO) {
+    public void createOpenTextTask(NewOpenTextTaskDTO newOpenTextTaskDTO) {
         Course course = genericValidationsCanCreateTaskAndGetCourse (
                 newOpenTextTaskDTO.getCourseId(),
                 newOpenTextTaskDTO.getStatement(),
@@ -34,11 +34,11 @@ public class TaskService {
         );
 
         Task task = new Task(course, Type.OPEN_TEXT, newOpenTextTaskDTO.getStatement().trim(), newOpenTextTaskDTO.getOrder());
-        return taskRepository.save(task);
+        taskRepository.save(task);
     }
 
     @Transactional
-    public Task createSingleChoiceTask(NewSingleChoiceTaskDTO newSingleChoiceTaskDTO) {
+    public void createSingleChoiceTask(NewSingleChoiceTaskDTO newSingleChoiceTaskDTO) {
         Course course = genericValidationsCanCreateTaskAndGetCourse(
                 newSingleChoiceTaskDTO.getCourseId(),
                 newSingleChoiceTaskDTO.getStatement(),
@@ -55,11 +55,11 @@ public class TaskService {
             task.addTaskOption(option);
         });
 
-        return taskRepository.save(task);
+        taskRepository.save(task);
     }
 
     @Transactional
-    public Task createMultipleChoiceTask(NewMultipleChoiceTaskDTO newMultipleChoiceTaskDTO) {
+    public void createMultipleChoiceTask(NewMultipleChoiceTaskDTO newMultipleChoiceTaskDTO) {
         Course course = genericValidationsCanCreateTaskAndGetCourse(
                 newMultipleChoiceTaskDTO.getCourseId(),
                 newMultipleChoiceTaskDTO.getStatement(),
@@ -76,7 +76,7 @@ public class TaskService {
             task.addTaskOption(option);
         });
 
-        return taskRepository.save(task);
+        taskRepository.save(task);
     }
 
     private Course genericValidationsCanCreateTaskAndGetCourse(Long courseId, String statement, Integer order) {
@@ -105,7 +105,7 @@ public class TaskService {
     private void validateOrderAndShift(Long courseId, Integer order) {
         Long count = taskRepository.countByCourseId(courseId);
         if (order > count + 1) {
-            throw new FieldValidationException("taskOrder", "Ordem inválida: Não podem haver brechas entre as ordens das atividade");
+            throw new FieldValidationException("taskOrder", "Ordem inválida: A ordem das atividade deve ser sequencial e não podem haver brechas entre elas");
         }
         if (order <= count) {
             taskRepository.shiftOrdersFrom(courseId, order);
