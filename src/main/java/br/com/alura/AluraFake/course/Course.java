@@ -32,6 +32,7 @@ public class Course {
     @Getter
     private Status status;
 
+    @Getter
     private LocalDateTime publishedAt;
 
     @Deprecated
