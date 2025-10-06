@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 public class CourseListItemDTO implements Serializable {
 
+    @Getter
     private Long id;
 
     @Getter
