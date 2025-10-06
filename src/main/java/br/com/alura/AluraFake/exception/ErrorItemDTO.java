@@ -1,4 +1,4 @@
-package br.com.alura.AluraFake.util;
+package br.com.alura.AluraFake.exception;
 
 import org.springframework.util.Assert;
 import org.springframework.validation.FieldError;
