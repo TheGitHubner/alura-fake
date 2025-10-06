@@ -3,6 +3,8 @@ package br.com.alura.AluraFake.task;
 import br.com.alura.AluraFake.course.Course;
 import br.com.alura.AluraFake.course.CourseRepository;
 import br.com.alura.AluraFake.course.Status;
+import br.com.alura.AluraFake.exception.FieldValidationException;
+import br.com.alura.AluraFake.exception.NotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -10,7 +12,6 @@ import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 
 @Service
@@ -80,7 +81,7 @@ public class TaskService {
 
     private Course genericValidationsCanCreateTaskAndGetCourse(Long courseId, String statement, Integer order) {
         Course course = courseRepository.findById(courseId)
-                .orElseThrow(() -> new NoSuchElementException("Curso não encontrado: " + courseId));
+                .orElseThrow(() -> new NotFoundException("courseId", "Curso não encontrado: " + courseId));
 
         validateCourseIsBuilding(course);
         validateStatementAlreadyExists(course.getId(), statement);
@@ -97,14 +98,14 @@ public class TaskService {
 
     private void validateStatementAlreadyExists(Long courseId, String statement) {
         if (taskRepository.existsByCourse_IdAndStatementIgnoreCase(courseId, statement.trim())) {
-            throw new IllegalArgumentException("Já existe uma atividade com o mesmo enunciado neste curso");
+            throw new FieldValidationException("statement", "Já existe uma atividade com o mesmo enunciado neste curso");
         }
     }
 
     private void validateOrderAndShift(Long courseId, Integer order) {
         Long count = taskRepository.countByCourseId(courseId);
         if (order > count + 1) {
-            throw new IllegalArgumentException("Não podem haver brechas entre as ordens das atividade");
+            throw new FieldValidationException("taskOrder", "Ordem inválida: Não podem haver brechas entre as ordens das atividade");
         }
         if (order <= count) {
             taskRepository.shiftOrdersFrom(courseId, order);
@@ -146,20 +147,20 @@ public class TaskService {
     }
 
     private void validateNoDuplicatesAndNotEqualStatement(String statement, List<NewTaskOptionDTO> options) {
-        String commingStatement = prepareForComparison(statement);
+        String newStatement = prepareForComparison(statement);
 
-        List<String> statements = new ArrayList<>();
+        List<String> validatedOptions = new ArrayList<>();
         for (NewTaskOptionDTO o : options) {
             Assert.isTrue(StringUtils.hasText(o.getOption()), "Opção não pode ser vazia");
-            String actualStatements = prepareForComparison(o.getOption());
+            String option = prepareForComparison(o.getOption());
 
-            if (actualStatements.equals(commingStatement)) {
-                throw new IllegalArgumentException("A alternativa não pode ser igual ao enunciado da atividade");
+            if (option.equals(newStatement)) {
+                throw new FieldValidationException("taskOption", "A alternativa não pode ser igual ao enunciado da atividade");
             }
-            if (statements.contains(actualStatements)) {
-                throw new IllegalArgumentException("As alternativas não podem se repetir");
+            if (validatedOptions.contains(option)) {
+                throw new FieldValidationException("taskOption", "As alternativas não podem se repetir");
             }
-            statements.add(actualStatements);
+            validatedOptions.add(option);
         }
     }
 

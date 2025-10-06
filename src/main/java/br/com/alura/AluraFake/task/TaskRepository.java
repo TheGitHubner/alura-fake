@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface TaskRepository extends JpaRepository<Task, Long>{
 
     boolean existsByCourse_IdAndStatementIgnoreCase(Long courseId, String statement);
@@ -20,4 +22,8 @@ public interface TaskRepository extends JpaRepository<Task, Long>{
              ORDER BY taskOrder DESC  
             """, nativeQuery = true)
     int shiftOrdersFrom(@Param("courseId") Long courseId, @Param("startOrder") Integer startOrder);
+
+    long countByCourse_IdAndTaskType(Long courseId, Type type);
+
+    List<Task> findAllByCourse_IdOrderByTaskOrderAsc(Long courseId);
 }

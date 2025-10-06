@@ -38,10 +38,19 @@ public class Course {
     public Course(){}
 
     public Course(String title, String description, User instructor) {
-        Assert.isTrue(instructor.isInstructor(), "Usuario deve ser um instrutor");
+        Assert.isTrue(instructor.isInstructor(), "Usuário deve ser um instrutor");
         this.title = title;
         this.instructor = instructor;
         this.description = description;
         this.status = Status.BUILDING;
+    }
+
+    public void publishCourse(LocalDateTime now) {
+        Assert.notNull(now, "Data de publicação deve ser informada");
+        if (this.status != Status.BUILDING) {
+            throw new IllegalStateException("Curso deve estar com status BUILDING para poder publicat");
+        }
+        this.status = Status.PUBLISHED;
+        this.publishedAt = now;
     }
 }
