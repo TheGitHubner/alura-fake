@@ -212,6 +212,28 @@ class TaskServiceTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("única devem ter entre 2 e 5");
     }
+
+    @Test
+    void createSingleChoiceTask__should_save_task() {
+        Course course = mockCourse(Status.BUILDING);
+        when(courseRepository.findById(COURSE_ID)).thenReturn(Optional.of(course));
+        when(taskRepository.existsByCourse_IdAndStatementIgnoreCase(eq(COURSE_ID), anyString())).thenReturn(false);
+        when(taskRepository.countByCourseId(COURSE_ID)).thenReturn(0L);
+
+        NewSingleChoiceTaskDTO newSingleChoiceTaskDTO =
+                newSingleChoiceDTO("Teste Single Choice", 1,
+                        Arrays.asList(getNewTaskOption("alternativa 1", true),
+                                getNewTaskOption("alternativa 2", false),
+                                getNewTaskOption("alternativa 3", false),
+                                getNewTaskOption("alternativa 4", false),
+                                getNewTaskOption("alternativa 5", false))
+                );
+
+        taskService.createSingleChoiceTask(newSingleChoiceTaskDTO);
+
+        verify(taskRepository).save(any(Task.class));
+    }
+
     @Test
     void createMultipleChoiceTask__should_persist_with_at_least_2_correct_and_1_incorrect_and_between_3_and_5_options() {
         Course course = mockCourse(Status.BUILDING);

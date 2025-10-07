@@ -5,6 +5,7 @@ import br.com.alura.AluraFake.task.enums.Type;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
@@ -32,6 +33,7 @@ public class Task {
 
     @Column(nullable = false)
     @Getter
+    @Setter
     private Integer taskOrder;
 
     @ManyToOne(optional = false)
